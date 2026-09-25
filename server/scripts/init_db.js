@@ -93,6 +93,7 @@ async function initDB() {
         periods_per_week INT NOT NULL CHECK (periods_per_week > 0),
         duration INT NOT NULL CHECK (duration > 0),
         requires_lab BOOLEAN DEFAULT FALSE,
+        is_active BOOLEAN DEFAULT TRUE,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE RESTRICT,
@@ -114,6 +115,97 @@ async function initDB() {
       )
     `);
     console.log('Table `class_subjects` checked/created.');
+
+    // 7. Faculty
+    await connection.query(`
+      CREATE TABLE IF NOT EXISTS faculty (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        department_id INT NOT NULL,
+        faculty_code VARCHAR(50) NOT NULL,
+        name VARCHAR(255) NOT NULL,
+        email VARCHAR(255) NOT NULL,
+        phone VARCHAR(50),
+        max_periods_per_day INT NOT NULL DEFAULT 4 CHECK (max_periods_per_day > 0),
+        max_periods_per_week INT NOT NULL DEFAULT 20 CHECK (max_periods_per_week > 0),
+        is_active BOOLEAN DEFAULT TRUE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE RESTRICT,
+        UNIQUE KEY unique_dept_faculty_code (department_id, faculty_code),
+        UNIQUE KEY unique_faculty_email (email)
+      )
+    `);
+    console.log('Table `faculty` checked/created.');
+
+    // 8. Faculty-Subjects (Mapping)
+    await connection.query(`
+      CREATE TABLE IF NOT EXISTS faculty_subjects (
+        faculty_id INT NOT NULL,
+        subject_id INT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (faculty_id, subject_id),
+        FOREIGN KEY (faculty_id) REFERENCES faculty(id) ON DELETE CASCADE,
+        FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE
+      )
+    `);
+    console.log('Table `faculty_subjects` checked/created.');
+
+    // 9. Rooms
+    await connection.query(`
+      CREATE TABLE IF NOT EXISTS rooms (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        institution_id INT NOT NULL,
+        room_code VARCHAR(50) NOT NULL,
+        name VARCHAR(255) NOT NULL,
+        type ENUM('CLASSROOM', 'LAB', 'SEMINAR_HALL', 'OTHER') NOT NULL DEFAULT 'CLASSROOM',
+        capacity INT NOT NULL CHECK (capacity > 0),
+        floor VARCHAR(50),
+        building VARCHAR(100),
+        is_active BOOLEAN DEFAULT TRUE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        FOREIGN KEY (institution_id) REFERENCES institutions(id) ON DELETE RESTRICT,
+        UNIQUE KEY unique_room_code (institution_id, room_code)
+      )
+    `);
+    console.log('Table `rooms` checked/created.');
+
+    // 10. Working Days
+    await connection.query(`
+      CREATE TABLE IF NOT EXISTS working_days (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        institution_id INT NOT NULL,
+        day_name VARCHAR(20) NOT NULL,
+        day_order INT NOT NULL CHECK (day_order >= 0),
+        is_active BOOLEAN DEFAULT TRUE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        FOREIGN KEY (institution_id) REFERENCES institutions(id) ON DELETE RESTRICT,
+        UNIQUE KEY unique_day_inst (institution_id, day_name),
+        UNIQUE KEY unique_day_order_inst (institution_id, day_order)
+      )
+    `);
+    console.log('Table `working_days` checked/created.');
+
+    // 11. Periods
+    await connection.query(`
+      CREATE TABLE IF NOT EXISTS periods (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        institution_id INT NOT NULL,
+        name VARCHAR(100) NOT NULL,
+        start_time TIME NOT NULL,
+        end_time TIME NOT NULL,
+        period_order INT NOT NULL CHECK (period_order >= 0),
+        is_break BOOLEAN DEFAULT FALSE,
+        is_lunch BOOLEAN DEFAULT FALSE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        FOREIGN KEY (institution_id) REFERENCES institutions(id) ON DELETE RESTRICT,
+        UNIQUE KEY unique_period_order (institution_id, period_order),
+        UNIQUE KEY unique_period_name (institution_id, name)
+      )
+    `);
+    console.log('Table `periods` checked/created.');
 
     await connection.end();
     console.log('Database initialization complete.');
