@@ -12,6 +12,9 @@ const facultySubjectRoutes = require('./routes/facultySubjects');
 const roomRoutes = require('./routes/rooms');
 const workingDayRoutes = require('./routes/workingDays');
 const periodRoutes = require('./routes/periods');
+const availabilityRoutes = require('./routes/availability');
+const constraintRoutes = require('./routes/constraints');
+const timetableRoutes = require('./routes/timetable');
 
 const app = express();
 
@@ -33,6 +36,9 @@ app.use('/api/faculty-subjects', facultySubjectRoutes);
 app.use('/api/rooms', roomRoutes);
 app.use('/api/working-days', workingDayRoutes);
 app.use('/api/periods', periodRoutes);
+app.use('/api/availability', availabilityRoutes);
+app.use('/api/constraints', constraintRoutes);
+app.use('/api/timetable', timetableRoutes);
 
 // Global Error Handler
 app.use((err, req, res, next) => {

@@ -10,6 +10,9 @@ import FacultySubjectMapping from './pages/FacultySubjectMapping';
 import Rooms from './pages/Rooms';
 import WorkingDays from './pages/WorkingDays';
 import Periods from './pages/Periods';
+import Availability from './pages/Availability';
+import Constraints from './pages/Constraints';
+import Feasibility from './pages/Feasibility';
 import './App.css';
 
 function Dashboard() {
@@ -67,6 +70,27 @@ function Dashboard() {
             <Link to="/periods" className="btn-primary">Periods</Link>
           </div>
         </div>
+
+        <div className="form-card" style={{ margin: 0 }}>
+          <h2 style={{ fontSize: '20px' }}>⏰ Phase 6 Constraints & Availability</h2>
+          <p style={{ fontSize: '14px', color: 'var(--text)', margin: '10px 0 16px' }}>
+            Configure faculty, class, and room availability grids. Set HARD & SOFT scheduling constraints.
+          </p>
+          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+            <Link to="/availability" className="btn-primary" style={{ background: '#7c3aed' }}>Availability</Link>
+            <Link to="/constraints" className="btn-primary" style={{ background: '#dc2626' }}>Constraints</Link>
+          </div>
+        </div>
+
+        <div className="form-card" style={{ margin: 0 }}>
+          <h2 style={{ fontSize: '20px' }}>⚙️ Phase 7 Feasibility Checker</h2>
+          <p style={{ fontSize: '14px', color: 'var(--text)', margin: '10px 0 16px' }}>
+            Verify if a valid timetable can be generated with the current configuration.
+          </p>
+          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+            <Link to="/feasibility" className="btn-primary" style={{ background: '#059669' }}>Feasibility Check</Link>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -95,6 +119,11 @@ function App() {
           <Link to="/rooms">Rooms</Link>
           <Link to="/working-days">Working Days</Link>
           <Link to="/periods">Periods</Link>
+          <span style={{ color: 'var(--border)', margin: '0 4px' }}>|</span>
+          <Link to="/availability">Availability</Link>
+          <Link to="/constraints">Constraints</Link>
+          <span style={{ color: 'var(--border)', margin: '0 4px' }}>|</span>
+          <Link to="/feasibility">Feasibility</Link>
         </nav>
         
         <Routes>
@@ -110,6 +139,9 @@ function App() {
           <Route path="/rooms" element={<Rooms />} />
           <Route path="/working-days" element={<WorkingDays />} />
           <Route path="/periods" element={<Periods />} />
+          <Route path="/availability" element={<Availability />} />
+          <Route path="/constraints" element={<Constraints />} />
+          <Route path="/feasibility" element={<Feasibility />} />
         </Routes>
       </div>
     </Router>
