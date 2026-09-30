@@ -15,6 +15,7 @@ const periodRoutes = require('./routes/periods');
 const availabilityRoutes = require('./routes/availability');
 const constraintRoutes = require('./routes/constraints');
 const timetableRoutes = require('./routes/timetable');
+const assistantRoutes = require('./routes/assistant');
 
 const app = express();
 
@@ -39,6 +40,8 @@ app.use('/api/periods', periodRoutes);
 app.use('/api/availability', availabilityRoutes);
 app.use('/api/constraints', constraintRoutes);
 app.use('/api/timetable', timetableRoutes);
+app.use('/api/timetable/assistant', assistantRoutes);
+app.use('/api/assistant', assistantRoutes);
 
 // Global Error Handler
 app.use((err, req, res, next) => {

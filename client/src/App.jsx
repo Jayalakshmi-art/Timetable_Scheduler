@@ -13,6 +13,9 @@ import Periods from './pages/Periods';
 import Availability from './pages/Availability';
 import Constraints from './pages/Constraints';
 import Feasibility from './pages/Feasibility';
+import TimetableGenerator from './pages/TimetableGenerator';
+import TimetableViewer from './pages/TimetableViewer';
+import AssistantChat from './pages/AssistantChat';
 import './App.css';
 
 function Dashboard() {
@@ -91,6 +94,36 @@ function Dashboard() {
             <Link to="/feasibility" className="btn-primary" style={{ background: '#059669' }}>Feasibility Check</Link>
           </div>
         </div>
+
+        <div className="form-card" style={{ margin: 0, border: '2px solid #6366f1' }}>
+          <h2 style={{ fontSize: '20px' }}>🚀 Phase 8 Timetable Engine</h2>
+          <p style={{ fontSize: '14px', color: 'var(--text)', margin: '10px 0 16px' }}>
+            Run deterministic CSP solver to generate conflict-free schedules with soft scoring.
+          </p>
+          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+            <Link to="/timetable" className="btn-primary" style={{ background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)' }}>Generate Timetable</Link>
+          </div>
+        </div>
+
+        <div className="form-card" style={{ margin: 0, border: '2px solid #059669' }}>
+          <h2 style={{ fontSize: '20px' }}>📅 Phase 9 Viewer &amp; Validator</h2>
+          <p style={{ fontSize: '14px', color: 'var(--text)', margin: '10px 0 16px' }}>
+            Weekly grids across classes, faculty, rooms, and days with independent constraint auditing.
+          </p>
+          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+            <Link to="/timetable/viewer" className="btn-primary" style={{ background: 'linear-gradient(135deg, #059669 0%, #10b981 100%)' }}>View &amp; Validate</Link>
+          </div>
+        </div>
+
+        <div className="form-card" style={{ margin: 0, border: '2px solid #8b5cf6' }}>
+          <h2 style={{ fontSize: '20px' }}>🤖 Phase 10 AI Assistant</h2>
+          <p style={{ fontSize: '14px', color: 'var(--text)', margin: '10px 0 16px' }}>
+            Conversational rescheduling with constraint solver previews and human approve/reject workflow.
+          </p>
+          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+            <Link to="/timetable/assistant" className="btn-primary" style={{ background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)' }}>AI Assistant Chat</Link>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -124,6 +157,10 @@ function App() {
           <Link to="/constraints">Constraints</Link>
           <span style={{ color: 'var(--border)', margin: '0 4px' }}>|</span>
           <Link to="/feasibility">Feasibility</Link>
+          <span style={{ color: 'var(--border)', margin: '0 4px' }}>|</span>
+          <Link to="/timetable" style={{ fontWeight: '700', color: '#4f46e5' }}>🚀 Generator</Link>
+          <Link to="/timetable/viewer" style={{ fontWeight: '700', color: '#059669' }}>📅 Viewer</Link>
+          <Link to="/timetable/assistant" style={{ fontWeight: '700', color: '#8b5cf6' }}>🤖 AI Assistant</Link>
         </nav>
         
         <Routes>
@@ -142,6 +179,9 @@ function App() {
           <Route path="/availability" element={<Availability />} />
           <Route path="/constraints" element={<Constraints />} />
           <Route path="/feasibility" element={<Feasibility />} />
+          <Route path="/timetable" element={<TimetableGenerator />} />
+          <Route path="/timetable/viewer" element={<TimetableViewer />} />
+          <Route path="/timetable/assistant" element={<AssistantChat />} />
         </Routes>
       </div>
     </Router>
